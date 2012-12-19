@@ -1,0 +1,11 @@
+In the current products application instead of servlets and XSLT transformations 
+use Struts classes. So you will have one JDOM object in ActionForm and all lists 
+of items will get from there directly using nested names (document.children...) 
+Struts feature help. List of products should be redacted having all of the rows 
+with input fields. After save action has occurred all of new data fills in the 
+JDOM model.
+Addition of new product leave through the XSLT transformation. 
+
+Please note that JDOM doesn't have void method setText() that causes Struts can 
+not invoke this method through reflection, so you need to add yours void method 
+in JDOM library to set element's text.
