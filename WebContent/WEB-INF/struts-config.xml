@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts-config PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 1.2//EN"
+        "http://jakarta.apache.org/struts/dtds/struts-config_1_2.dtd">
+
+<struts-config>
+	<!-- Forms -->
+	<form-beans>
+		<form-bean name="showCategoriesForm" type="com.epam.task6.form.ShowCategoriesForm" />
+
+	</form-beans>
+
+	<!-- Global forwards -->
+	<global-forwards>
+		<forward name="categoriesPage" path="/ShowCategories.do" />
+		
+	</global-forwards>
+
+	<!-- Actions -->
+	<action-mappings>
+
+		<action path="/ShowCategories" type="com.epam.task6.action.ShowCategoriesAction"
+			name="showCategoriesForm">
+		</action>
+
+
+	</action-mappings>
+
+	<!-- Tiles processor 
+	<controller processorClass="org.apache.struts.tiles.TilesRequestProcessor" />-->
+
+	<!-- Internationalization
+	<message-resources parameter="com/epam/news/resources/ApplicationResource"
+		null="false" /> -->
+
+	<!-- Struts tiles configuration 
+	<plug-in className="org.apache.struts.tiles.TilesPlugin">
+		<set-property property="definitions-config" value="/WEB-INF/tiles-defs.xml" />
+	</plug-in>-->
+	<!-- Spring integration
+	<plug-in className="org.springframework.web.struts.ContextLoaderPlugIn">
+		<set-property property="contextConfigLocation" value="/WEB-INF/applicationContext.xml" />
+	</plug-in> -->
+</struts-config>

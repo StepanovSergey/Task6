@@ -52,7 +52,7 @@
 	</filter>
 	<filter-mapping>
 		<filter-name>SetCharFilter</filter-name>
-		<servlet-name>MyServletName</servlet-name>
+		<servlet-name>action</servlet-name>
 	</filter-mapping>
 
 	<welcome-file-list>
