@@ -44,6 +44,7 @@ public final class CommandFactory {
     public static ICommand getCommand(HttpServletRequest request) {
 	if (realPath == null) {
 	    realPath = request.getSession().getServletContext().getRealPath("");
+	    System.out.println("Real path:" + realPath);
 	}
 	if (xmlFile == null) {
 	    xmlFile = new File(realPath + XML_PATH);

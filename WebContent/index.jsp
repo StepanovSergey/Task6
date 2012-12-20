@@ -2,5 +2,4 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 
-<%-- <logic:redirect forward="categoriesPage" /> --%>
-hello people
+<logic:redirect forward="categoriesPage" />

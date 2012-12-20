@@ -41,7 +41,7 @@ public class ShowCategoriesAction extends Action {
 	    ActionForm actionForm, HttpServletRequest request,
 	    HttpServletResponse response) throws Exception {
 	System.out.println("Starting action");
-	/*try {
+	try {
 	    Transformer transformer = XsltTransformerFactory
 		    .getTransformer(CATEGORIES_XSLT);
 	    readLock.lock();
@@ -54,7 +54,7 @@ public class ShowCategoriesAction extends Action {
 	    }
 	} finally {
 	    readLock.unlock();
-	}*/
+	}
 	System.out.println("End of action");
 	return actionMapping.findForward("");
     }
