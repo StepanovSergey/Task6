@@ -1,4 +1,4 @@
-package com.epam.task6.command;
+package com.epam.task6.action;
 
 import static com.epam.task6.resource.Constants.ADD_PRODUCT_XSLT;
 import static com.epam.task6.resource.Constants.COLOR_TAG;
@@ -12,6 +12,7 @@ import static com.epam.task6.resource.Constants.PRICE_TAG;
 import static com.epam.task6.resource.Constants.PRODUCER_TAG;
 import static com.epam.task6.resource.Constants.PRODUCT_PARAMETER;
 import static com.epam.task6.resource.Constants.VALIDATOR_PARAMETER;
+import static com.epam.task6.resource.Constants.XML_FILE;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,54 +32,50 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
 
 import com.epam.task6.model.Product;
 import com.epam.task6.transform.XsltTransformerFactory;
 import com.epam.task6.validation.ProductValidator;
 
 /**
- * Save product page
+ * This action add product to xml
  * 
  * @author Siarhei_Stsiapanau
  * 
  */
-public class AddProductCommand implements ICommand {
+public class AddProductAction extends Action {
     private static final Logger logger = Logger
-	    .getLogger(AddProductCommand.class);
+	    .getLogger(AddProductAction.class);
     private static final String ENCODING = "UTF-8";
     private final ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
     private final Lock readLock = readWriteLock.readLock();
     private final Lock writeLock = readWriteLock.writeLock();
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * com.epam.task5.command.ICommand#execute(javax.servlet.http.HttpServletRequest
-     * , javax.servlet.http.HttpServletResponse)
-     */
-    @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) {
+    public ActionForward execute(ActionMapping actionMapping,
+	    ActionForm actionForm, HttpServletRequest request,
+	    HttpServletResponse response) throws Exception {
+	Transformer transformer = XsltTransformerFactory
+		.getTransformer(ADD_PRODUCT_XSLT);
+	String currentCategory = request
+		.getParameter(CURRENT_CATEGORY_PARAMETER);
+	transformer.setParameter(CURRENT_CATEGORY_PARAMETER, currentCategory);
+	String currentSubcategory = request
+		.getParameter(CURRENT_SUBCATEGORY_PARAMETER);
+	transformer.setParameter(CURRENT_SUBCATEGORY_PARAMETER,
+		currentSubcategory);
+	ProductValidator validator = new ProductValidator();
+	transformer.setParameter(VALIDATOR_PARAMETER, validator);
+	Product product = setProductParameters(request);
+	transformer.setParameter(PRODUCT_PARAMETER, product);
 	try {
-	    Transformer transformer = XsltTransformerFactory
-		    .getTransformer(ADD_PRODUCT_XSLT);
-	    String currentCategory = request
-		    .getParameter(CURRENT_CATEGORY_PARAMETER);
-	    transformer.setParameter(CURRENT_CATEGORY_PARAMETER,
-		    currentCategory);
-	    String currentSubcategory = request
-		    .getParameter(CURRENT_SUBCATEGORY_PARAMETER);
-	    transformer.setParameter(CURRENT_SUBCATEGORY_PARAMETER,
-		    currentSubcategory);
-	    ProductValidator validator = new ProductValidator();
-	    transformer.setParameter(VALIDATOR_PARAMETER, validator);
-	    Product product = setProductParameters(request);
-	    transformer.setParameter(PRODUCT_PARAMETER, product);
 	    Writer result = new StringWriter();
 	    try {
 		readLock.lock();
-		transformer.transform(
-			new StreamSource(CommandFactory.getXmlFile()),
+		transformer.transform(new StreamSource(XML_FILE),
 			new StreamResult(result));
 
 	    } catch (TransformerException e) {
@@ -92,10 +89,9 @@ public class AddProductCommand implements ICommand {
 	    Writer writer = response.getWriter();
 
 	    if (validator.isProductValid(product)) {
-		write(CommandFactory.getXmlFile(), result);
-		String link = "Controller?command=show_products&current_category="
-			+ currentCategory
-			+ "&current_subcategory="
+		write(XML_FILE, result);
+		String link = "ShowProducts.do?current_category="
+			+ currentCategory + "&current_subcategory="
 			+ currentSubcategory;
 		response.sendRedirect(link);
 	    } else {
@@ -106,6 +102,7 @@ public class AddProductCommand implements ICommand {
 		logger.error(e.getMessage(), e);
 	    }
 	}
+	return actionMapping.findForward("");
     }
 
     private Product setProductParameters(HttpServletRequest request) {

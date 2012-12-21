@@ -8,13 +8,13 @@
 	<xsl:param name="validator" />
 	<xsl:template match="/">
 		<xsl:choose>
-			<xsl:when test="validator:isProductValid($product)">
+			<xsl:when test="validator:isProductValid($validator)">
 				<xsl:apply-templates />
 			</xsl:when>
 			<xsl:otherwise>
 				<html>
 					<head>
-						<link rel="stylesheet" type="text/css" href="css/style.css"></link>
+						<link rel="stylesheet" type="text/css" href="css/style.css" />
 						<title>Add product</title>
 					</head>
 					<body>
@@ -24,8 +24,7 @@
 							<tr>
 								<td></td>
 								<td>
-									<form action="Controller" metod="POST">
-										<input type="hidden" name="command" value="show_products" />
+									<form action="ShowProducts.do" metod="POST">
 										<input type="hidden" name="current_category" value="{$current_category}" />
 										<input type="hidden" name="current_subcategory" value="{$current_subcategory}" />
 										<input type="submit" value="Back" />
@@ -41,8 +40,7 @@
 
 
 	<xsl:template name="addProduct">
-		<form action="Controller" metod="POST">
-			<input type="hidden" name="command" value="add_product" />
+		<form action="AddProduct.do" metod="POST">
 			<input type="hidden" name="current_category" value="{$current_category}" />
 			<input type="hidden" name="current_subcategory" value="{$current_subcategory}" />
 			<tr>

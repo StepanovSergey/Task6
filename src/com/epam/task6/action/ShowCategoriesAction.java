@@ -1,10 +1,11 @@
-/**
- * 
- */
 package com.epam.task6.action;
 
 import static com.epam.task6.resource.Constants.CATEGORIES_XSLT;
+import static com.epam.task6.resource.Constants.REAL_PATH;
+import static com.epam.task6.resource.Constants.XML_FILE;
+import static com.epam.task6.resource.Constants.XML_PATH;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -24,10 +25,11 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import com.epam.task6.command.CommandFactory;
 import com.epam.task6.transform.XsltTransformerFactory;
 
 /**
+ * This action shows list of categories
+ * 
  * @author Siarhei_Stsiapanau
  * 
  */
@@ -40,14 +42,18 @@ public class ShowCategoriesAction extends Action {
     public ActionForward execute(ActionMapping actionMapping,
 	    ActionForm actionForm, HttpServletRequest request,
 	    HttpServletResponse response) throws Exception {
-	System.out.println("Starting action");
+	if (REAL_PATH.equals("")) {
+	    REAL_PATH = request.getServletContext().getRealPath("");
+	}
+	if (XML_FILE == null) {
+	    XML_FILE = new File(REAL_PATH + XML_PATH);
+	}
+	Transformer transformer = XsltTransformerFactory
+		.getTransformer(CATEGORIES_XSLT);
 	try {
-	    Transformer transformer = XsltTransformerFactory
-		    .getTransformer(CATEGORIES_XSLT);
 	    readLock.lock();
-	    transformer.transform(
-		    new StreamSource(CommandFactory.getXmlFile()),
-		    new StreamResult(response.getWriter()));
+	    transformer.transform(new StreamSource(XML_FILE), new StreamResult(
+		    response.getWriter()));
 	} catch (TransformerException | IOException e) {
 	    if (logger.isEnabledFor(Level.ERROR)) {
 		logger.error(e.getMessage(), e);
@@ -55,8 +61,6 @@ public class ShowCategoriesAction extends Action {
 	} finally {
 	    readLock.unlock();
 	}
-	System.out.println("End of action");
 	return actionMapping.findForward("");
     }
-
 }

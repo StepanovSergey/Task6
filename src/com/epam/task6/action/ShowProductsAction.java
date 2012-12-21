@@ -1,8 +1,9 @@
-package com.epam.task6.command;
+package com.epam.task6.action;
 
 import static com.epam.task6.resource.Constants.CURRENT_CATEGORY_PARAMETER;
 import static com.epam.task6.resource.Constants.CURRENT_SUBCATEGORY_PARAMETER;
 import static com.epam.task6.resource.Constants.PRODUCTS_XSLT;
+import static com.epam.task6.resource.Constants.XML_FILE;
 
 import java.io.IOException;
 import java.util.concurrent.locks.Lock;
@@ -18,44 +19,41 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
 
 import com.epam.task6.transform.XsltTransformerFactory;
 
 /**
- * This command shows products list
+ * This action shows list of products
  * 
  * @author Siarhei_Stsiapanau
  * 
  */
-public class ShowProductsCommand implements ICommand {
+public class ShowProductsAction extends Action {
     private static final Logger logger = Logger
-	    .getLogger(ShowProductsCommand.class);
+	    .getLogger(ShowProductsAction.class);
     private final ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
     private final Lock readLock = readWriteLock.readLock();
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * com.epam.task5.command.ICommand#execute(javax.servlet.http.HttpServletRequest
-     * , javax.servlet.http.HttpServletResponse)
-     */
-    @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) {
+    public ActionForward execute(ActionMapping actionMapping,
+	    ActionForm actionForm, HttpServletRequest request,
+	    HttpServletResponse response) throws Exception {
+	Transformer transformer = XsltTransformerFactory
+		.getTransformer(PRODUCTS_XSLT);
+	String currentCategory = request
+		.getParameter(CURRENT_CATEGORY_PARAMETER);
+	transformer.setParameter(CURRENT_CATEGORY_PARAMETER, currentCategory);
+	String currentSubcategory = request
+		.getParameter(CURRENT_SUBCATEGORY_PARAMETER);
+	transformer.setParameter(CURRENT_SUBCATEGORY_PARAMETER,
+		currentSubcategory);
 	try {
-	    Transformer transformer = XsltTransformerFactory
-		    .getTransformer(PRODUCTS_XSLT);
-	    String currentCategory = request
-		    .getParameter(CURRENT_CATEGORY_PARAMETER);
-	    transformer.setParameter(CURRENT_CATEGORY_PARAMETER,
-		    currentCategory);
-	    String currentSubcategory = request
-		    .getParameter(CURRENT_SUBCATEGORY_PARAMETER);
-	    transformer.setParameter(CURRENT_SUBCATEGORY_PARAMETER,
-		    currentSubcategory);
 	    readLock.lock();
 	    transformer.transform(
-		    new StreamSource(CommandFactory.getXmlFile()),
+		    new StreamSource(XML_FILE),
 		    new StreamResult(response.getWriter()));
 	} catch (TransformerException | IOException e) {
 	    if (logger.isEnabledFor(Level.ERROR)) {
@@ -64,7 +62,6 @@ public class ShowProductsCommand implements ICommand {
 	} finally {
 	    readLock.unlock();
 	}
-
+	return actionMapping.findForward("");
     }
-
 }

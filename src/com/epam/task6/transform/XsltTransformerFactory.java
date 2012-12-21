@@ -13,7 +13,7 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-import com.epam.task6.command.CommandFactory;
+import com.epam.task6.resource.Constants;
 
 
 /**
@@ -43,7 +43,7 @@ public final class XsltTransformerFactory {
 	try {
 	    Templates template = xsltTemplates.get(xsltFilePath);
 	    if (template == null) {
-		String realPath = CommandFactory.getRealPath();
+		String realPath = Constants.REAL_PATH;
 		TransformerFactory factory = TransformerFactory.newInstance();
 		template = factory.newTemplates(new StreamSource(new File(
 			realPath + xsltFilePath)));

@@ -7,7 +7,6 @@
 <struts-config>
 	<!-- Forms -->
 	<form-beans>
-		<form-bean name="showCategoriesForm" type="com.epam.task6.form.ShowCategoriesForm" />
 
 	</form-beans>
 
@@ -20,10 +19,17 @@
 	<!-- Actions -->
 	<action-mappings>
 
-		<action path="/ShowCategories" type="com.epam.task6.action.ShowCategoriesAction"
-			name="showCategoriesForm">
+		<action path="/ShowCategories" type="com.epam.task6.action.ShowCategoriesAction">
 		</action>
-
+		
+		<action path="/ShowSubcategories" type="com.epam.task6.action.ShowSubcategoriesAction">
+		</action>
+		
+		<action path="/ShowProducts" type="com.epam.task6.action.ShowProductsAction">
+		</action>
+		
+		<action path="/AddProduct" type="com.epam.task6.action.AddProductAction">
+		</action>
 
 	</action-mappings>
 

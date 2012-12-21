@@ -23,14 +23,12 @@
 						<xsl:call-template name="products" />
 					</xsl:for-each>
 				</table>
-				<form action="Controller" metod="POST">
-					<input type="hidden" name="command" value="add_product" />
+				<form action="AddProduct.do" metod="POST">
 					<input type="hidden" name="current_category" value="{$current_category}" />
 					<input type="hidden" name="current_subcategory" value="{$current_subcategory}" />
 					<input type="submit" value="Add Product" />
 				</form>
-				<form action="Controller" metod="POST">
-					<input type="hidden" name="command" value="show_subcategories" />
+				<form action="ShowSubcategories.do" metod="POST">
 					<input type="hidden" name="current_category" value="{$current_category}" />
 					<input type="hidden" name="current_subcategory" value="{$current_subcategory}" />
 					<input type="submit" value="Back" />

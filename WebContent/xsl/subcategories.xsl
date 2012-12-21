@@ -14,8 +14,7 @@
 				<xsl:for-each select="//category[@name=$current_category]/subcategory">
 					<xsl:call-template name="subcategories" />
 				</xsl:for-each>
-				<form action="Controller" method="post">
-					<input type="hidden" name="command" value="show_categories" />
+				<form action="ShowCategories.do" method="post">
 					<input type="submit" value="Back" />
 				</form>
 			</body>
@@ -27,7 +26,7 @@
 		<xsl:param name="subcategory_name" select="@name" />
 		<p>
 			<a
-				href="Controller?command=show_products&amp;current_category={$current_category}&amp;current_subcategory={$subcategory_name}">
+				href="ShowProducts.do?current_category={$current_category}&amp;current_subcategory={$subcategory_name}">
 				<xsl:value-of select="$subcategory_name" />
 				(
 				<xsl:value-of select="count(product)" />

@@ -1,5 +1,7 @@
 package com.epam.task6.resource;
 
+import java.io.File;
+
 /**
  * @author Siarhei_Stsiapanau
  * 
@@ -9,6 +11,8 @@ public final class Constants {
     }
 
     // Common constants
+    public static String REAL_PATH = "";
+    public static File XML_FILE;
     public static final String COMMAND_PARAMETER = "command";
     public static final String NO_COMMAND = "no_command";
     public static final String XML_PATH = "/xml/products.xml";
