@@ -3,6 +3,8 @@ package com.epam.task6.transform;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
@@ -15,7 +17,6 @@ import org.apache.log4j.Logger;
 
 import com.epam.task6.resource.Constants;
 
-
 /**
  * This class provides XSLT transformer factory
  * 
@@ -27,6 +28,7 @@ public final class XsltTransformerFactory {
 	    .getLogger(XsltTransformerFactory.class);
     private static final XsltTransformerFactory instance = new XsltTransformerFactory();
     private static Map<String, Templates> xsltTemplates = new HashMap<>();
+    private static Lock lock = new ReentrantLock();
 
     private XsltTransformerFactory() {
     }
@@ -40,20 +42,27 @@ public final class XsltTransformerFactory {
      */
     public static Transformer getTransformer(String xsltFilePath) {
 	Transformer transformer = null;
+	String realPath = Constants.REAL_PATH;
 	try {
 	    Templates template = xsltTemplates.get(xsltFilePath);
 	    if (template == null) {
-		String realPath = Constants.REAL_PATH;
-		TransformerFactory factory = TransformerFactory.newInstance();
-		template = factory.newTemplates(new StreamSource(new File(
-			realPath + xsltFilePath)));
-		xsltTemplates.put(xsltFilePath, template);
+		lock.lock();
+		template = xsltTemplates.get(xsltFilePath);
+		if (template == null) {
+		    TransformerFactory factory = TransformerFactory
+			    .newInstance();
+		    template = factory.newTemplates(new StreamSource(new File(
+			    realPath + xsltFilePath)));
+		    xsltTemplates.put(xsltFilePath, template);
+		}
 	    }
 	    transformer = template.newTransformer();
 	} catch (TransformerConfigurationException e) {
 	    if (logger.isEnabledFor(Level.ERROR)) {
 		logger.error(e.getMessage(), e);
 	    }
+	} finally {
+	    lock.unlock();
 	}
 	return transformer;
     }
