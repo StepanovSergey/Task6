@@ -43,10 +43,10 @@ public final class XsltTransformerFactory {
     public static Transformer getTransformer(String xsltFilePath) {
 	Transformer transformer = null;
 	String realPath = Constants.REAL_PATH;
+	Templates template = xsltTemplates.get(xsltFilePath);
+	lock.lock();
 	try {
-	    Templates template = xsltTemplates.get(xsltFilePath);
 	    if (template == null) {
-		lock.lock();
 		template = xsltTemplates.get(xsltFilePath);
 		if (template == null) {
 		    TransformerFactory factory = TransformerFactory
