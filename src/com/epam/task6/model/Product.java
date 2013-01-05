@@ -1,12 +1,15 @@
 package com.epam.task6.model;
 
+import java.io.Serializable;
+
 /**
  * This class provides shop model (bean)
  * 
  * @author Siarhei_Stsiapanau
  * 
  */
-public class Product {
+public class Product implements Serializable {
+    private static final long serialVersionUID = -2063462092851490543L;
     private String producer;
     private String model;
     private String dateOfIssue;

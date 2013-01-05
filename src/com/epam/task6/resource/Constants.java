@@ -50,5 +50,14 @@ public final class Constants {
     public static final String DATE_PATTERN = "date_pattern";
     public static final String COLOR_PATTERN = "color_pattern";
     public static final String DEFAULT_PRICE = "0";
-    
+    // Task6
+    public static final String CATEGORY_DATA = "category_data";
+    public static final String SUBCATEGORY_DATA = "subcategory_data";
+    public static final String PRODUCTS = "products";
+    public static final String PRODUCT = "product";
+    //Forwards
+    public static final String SHOW_CATEGORIES = "show_categories";
+    public static final String SHOW_SUBCATEGORIES = "show_subcategories";
+    public static final String SHOW_PRODUCTS = "show_products";
+    public static final String ADD_PRODUCT = "add_product";
 }

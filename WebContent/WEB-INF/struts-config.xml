@@ -7,13 +7,17 @@
 <struts-config>
 	<!-- Forms -->
 	<form-beans>
-
+		<form-bean name="addProductForm" type="com.epam.task6.form.AddProductForm"></form-bean>
 	</form-beans>
 
 	<!-- Global forwards -->
 	<global-forwards>
 		<forward name="categoriesPage" path="/ShowCategories.do" />
-		
+		<forward name="show_categories" path="/jsp/categories.jsp" />
+		<forward name="show_subcategories" path="/jsp/subcategories.jsp" />
+		<forward name="show_products" path="/jsp/products.jsp" />
+		<forward name="add_product" path="/jsp/addProduct.jsp" />
+
 	</global-forwards>
 
 	<!-- Actions -->
@@ -21,31 +25,20 @@
 
 		<action path="/ShowCategories" type="com.epam.task6.action.ShowCategoriesAction">
 		</action>
-		
+
 		<action path="/ShowSubcategories" type="com.epam.task6.action.ShowSubcategoriesAction">
 		</action>
-		
+
 		<action path="/ShowProducts" type="com.epam.task6.action.ShowProductsAction">
 		</action>
+
+		<action path="/AddProduct" name="addProductForm"
+			type="com.epam.task6.action.AddProductAction">
+		</action>
 		
-		<action path="/AddProduct" type="com.epam.task6.action.AddProductAction">
+		<action path="/SaveProduct" name="addProductForm"
+			type="com.epam.task6.action.AddProductAction">
 		</action>
 
 	</action-mappings>
-
-	<!-- Tiles processor 
-	<controller processorClass="org.apache.struts.tiles.TilesRequestProcessor" />-->
-
-	<!-- Internationalization
-	<message-resources parameter="com/epam/news/resources/ApplicationResource"
-		null="false" /> -->
-
-	<!-- Struts tiles configuration 
-	<plug-in className="org.apache.struts.tiles.TilesPlugin">
-		<set-property property="definitions-config" value="/WEB-INF/tiles-defs.xml" />
-	</plug-in>-->
-	<!-- Spring integration
-	<plug-in className="org.springframework.web.struts.ContextLoaderPlugIn">
-		<set-property property="contextConfigLocation" value="/WEB-INF/applicationContext.xml" />
-	</plug-in> -->
 </struts-config>

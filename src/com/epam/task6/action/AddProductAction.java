@@ -1,6 +1,6 @@
 package com.epam.task6.action;
 
-import static com.epam.task6.resource.Constants.ADD_PRODUCT_XSLT;
+import static com.epam.task6.resource.Constants.*;
 import static com.epam.task6.resource.Constants.COLOR_TAG;
 import static com.epam.task6.resource.Constants.CURRENT_CATEGORY_PARAMETER;
 import static com.epam.task6.resource.Constants.CURRENT_SUBCATEGORY_PARAMETER;
@@ -37,6 +37,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import com.epam.task6.form.AddProductForm;
 import com.epam.task6.model.Product;
 import com.epam.task6.transform.XsltTransformerFactory;
 import com.epam.task6.validation.ProductValidator;
@@ -58,51 +59,49 @@ public class AddProductAction extends Action {
     public ActionForward execute(ActionMapping actionMapping,
 	    ActionForm actionForm, HttpServletRequest request,
 	    HttpServletResponse response) throws Exception {
-	Transformer transformer = XsltTransformerFactory
-		.getTransformer(ADD_PRODUCT_XSLT);
 	String currentCategory = request
 		.getParameter(CURRENT_CATEGORY_PARAMETER);
-	transformer.setParameter(CURRENT_CATEGORY_PARAMETER, currentCategory);
 	String currentSubcategory = request
 		.getParameter(CURRENT_SUBCATEGORY_PARAMETER);
-	transformer.setParameter(CURRENT_SUBCATEGORY_PARAMETER,
-		currentSubcategory);
-	ProductValidator validator = new ProductValidator();
-	transformer.setParameter(VALIDATOR_PARAMETER, validator);
-	Product product = setProductParameters(request);
-	transformer.setParameter(PRODUCT_PARAMETER, product);
-	try {
-	    Writer result = new StringWriter();
-	    try {
-		readLock.lock();
-		transformer.transform(new StreamSource(XML_FILE),
-			new StreamResult(result));
-
-	    } catch (TransformerException e) {
-		if (logger.isEnabledFor(Level.ERROR)) {
-		    logger.error(e.getMessage(), e);
-		}
-	    } finally {
-		readLock.unlock();
-	    }
-
-	    Writer writer = response.getWriter();
-
-	    if (validator.isProductValid(product)) {
-		write(XML_FILE, result);
-		String link = "ShowProducts.do?current_category="
-			+ currentCategory + "&current_subcategory="
-			+ currentSubcategory;
-		response.sendRedirect(link);
-	    } else {
-		writer.write(result.toString());
-	    }
-	} catch (IOException e) {
-	    if (logger.isEnabledFor(Level.ERROR)) {
-		logger.error(e.getMessage(), e);
-	    }
+	AddProductForm addForm = (AddProductForm) actionForm;
+	if (addForm.getProduct() == null) {
+	    System.out.println("Creating new product...");
+	    addForm.setProduct(new Product());
+	} else {
+	    System.out.println("Product from form: "
+		    + addForm.getProduct());
 	}
-	return actionMapping.findForward("");
+	request.getSession().setAttribute("product", addForm.getProduct());
+	/*
+	 * Transformer transformer = XsltTransformerFactory
+	 * .getTransformer(ADD_PRODUCT_XSLT);
+	 * transformer.setParameter(CURRENT_CATEGORY_PARAMETER,
+	 * currentCategory);
+	 * 
+	 * transformer.setParameter(CURRENT_SUBCATEGORY_PARAMETER,
+	 * currentSubcategory); ProductValidator validator = new
+	 * ProductValidator(); transformer.setParameter(VALIDATOR_PARAMETER,
+	 * validator); Product product = setProductParameters(request);
+	 * transformer.setParameter(PRODUCT_PARAMETER, product); try { Writer
+	 * result = new StringWriter(); try { readLock.lock();
+	 * transformer.transform(new StreamSource(XML_FILE), new
+	 * StreamResult(result));
+	 * 
+	 * } catch (TransformerException e) { if
+	 * (logger.isEnabledFor(Level.ERROR)) { logger.error(e.getMessage(), e);
+	 * } } finally { readLock.unlock(); }
+	 * 
+	 * Writer writer = response.getWriter();
+	 * 
+	 * if (validator.isProductValid(product)) { write(XML_FILE, result);
+	 * String link = "ShowProducts.do?current_category=" + currentCategory +
+	 * "&current_subcategory=" + currentSubcategory;
+	 * response.sendRedirect(link); } else {
+	 * writer.write(result.toString()); } } catch (IOException e) { if
+	 * (logger.isEnabledFor(Level.ERROR)) { logger.error(e.getMessage(), e);
+	 * } }
+	 */
+	return actionMapping.findForward(ADD_PRODUCT);
     }
 
     private Product setProductParameters(HttpServletRequest request) {
