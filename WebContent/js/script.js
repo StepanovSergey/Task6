@@ -1,5 +1,5 @@
 function validateAddProductForm(form) {
-	var element, elementName, elementValue;
+	var element, elementValue;
 	var isProductValid = true;
 	var modelPattern = "^(([A-Za-zР-пр-џЈИ]){2}([0-9]){3})$";
 	var datePattern = "^((0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-(19[7-9][0-9]|2[0-2][0-9][0-9]))$";
@@ -7,9 +7,9 @@ function validateAddProductForm(form) {
 	var colorPattern = "^[A-Za-zР-пр-џЈИ]+$";
 	for ( var i = 0; i < form.elements.length; i++) {
 		element = form.elements[i];
-		elementName = element.nodeName.toLowerCase();
+		elementName = element.name;
 		elementValue = element.value;
-		if (element.name == "product.producer") {
+		if (elementName == "product.producer") {
 			if (elementValue == "") {
 				isProductValid = false;
 				showError("producer", "Producer must be specified");
@@ -17,7 +17,7 @@ function validateAddProductForm(form) {
 				clearError("producer");
 			}
 		}
-		if (element.name == "product.model") {
+		if (elementName == "product.model") {
 			var expr = new RegExp(modelPattern);
 			if (!(elementValue.match(expr))) {
 				isProductValid = false;
@@ -26,7 +26,7 @@ function validateAddProductForm(form) {
 				clearError("model");
 			}
 		}
-		if (element.name == "product.color") {
+		if (elementName == "product.color") {
 			var expr = new RegExp(colorPattern);
 			if (!(elementValue.match(expr))) {
 				isProductValid = false;
@@ -36,16 +36,20 @@ function validateAddProductForm(form) {
 			}
 		}
 
-		if (element.name == "product.price") {
-			var expr = new RegExp(pricePattern);
-			if (!(elementValue.match(expr))) {
-				isProductValid = false;
-				showError("price", "Price must be e.g 14, 10.0 or 17.12");
-			} else {
-				clearError("price");
+		if (elementName == "product.price") {
+			el = document.getElementsByName("product.notInStock");
+			notInStock = el[0];
+			if (notInStock.checked == false) {
+				var expr = new RegExp(pricePattern);
+				if (!(elementValue.match(expr))) {
+					isProductValid = false;
+					showError("price", "Price must be e.g 14, 10.0 or 17.12");
+				} else {
+					clearError("price");
+				}
 			}
 		}
-		if (element.name == "product.dateOfIssue") {
+		if (elementName == "product.dateOfIssue") {
 			var expr = new RegExp(datePattern);
 			if (!(elementValue.match(expr))) {
 				isProductValid = false;
@@ -53,10 +57,6 @@ function validateAddProductForm(form) {
 			} else {
 				clearError("date");
 			}
-		}
-		if (element.name == "product.notInStock") {
-			isProductValid = false;
-			alert("Not in stock: " + elementValue);
 		}
 	}
 	if (isProductValid) {

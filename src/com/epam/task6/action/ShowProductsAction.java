@@ -1,8 +1,8 @@
 package com.epam.task6.action;
 
 import static com.epam.task6.resource.Constants.COLOR_TAG;
-import static com.epam.task6.resource.Constants.CURRENT_CATEGORY_PARAMETER;
-import static com.epam.task6.resource.Constants.CURRENT_SUBCATEGORY_PARAMETER;
+import static com.epam.task6.resource.Constants.CATEGORY_NAME_PARAMETER;
+import static com.epam.task6.resource.Constants.SUBCATEGORY_NAME_PARAMETER;
 import static com.epam.task6.resource.Constants.DATE_OF_ISSUE_TAG;
 import static com.epam.task6.resource.Constants.MODEL_TAG;
 import static com.epam.task6.resource.Constants.NAME_ATTRIBUTE;
@@ -47,9 +47,9 @@ public class ShowProductsAction extends Action {
 	Element root = doc.getRootElement();
 	Map<String, Integer> map = new HashMap<>();
 	String currentCategory = request
-		.getParameter(CURRENT_CATEGORY_PARAMETER);
+		.getParameter(CATEGORY_NAME_PARAMETER);
 	String currentSubcategory = request
-		.getParameter(CURRENT_SUBCATEGORY_PARAMETER);
+		.getParameter(SUBCATEGORY_NAME_PARAMETER);
 	List<Product> products = new ArrayList<>();
 	List<Element> categoryList = root.getChildren();
 	for (int i = 0; i < categoryList.size(); i++) {
@@ -74,8 +74,8 @@ public class ShowProductsAction extends Action {
 	}
 	HttpSession session = request.getSession();
 	session.setAttribute(PRODUCTS, products);
-	session.setAttribute(CURRENT_CATEGORY_PARAMETER, currentCategory);
-	session.setAttribute(CURRENT_SUBCATEGORY_PARAMETER, currentSubcategory);
+	session.setAttribute(CATEGORY_NAME_PARAMETER, currentCategory);
+	session.setAttribute(SUBCATEGORY_NAME_PARAMETER, currentSubcategory);
 	return mapping.findForward(SHOW_PRODUCTS);
     }
 

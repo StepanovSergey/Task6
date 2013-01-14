@@ -31,6 +31,10 @@
 						<c:when test="${product.price > 0 }">${product.price }</c:when>
 						<c:otherwise>Not in stock</c:otherwise>
 					</c:choose></td>
+				<td><html:form action="/EditProduct">
+						<html:submit>Edit</html:submit>
+						<html:hidden property="product" value="${product }"/>
+					</html:form></td>
 			</tr>
 		</c:forEach>
 	</table>

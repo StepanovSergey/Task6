@@ -1,14 +1,8 @@
 package com.epam.task6.action;
 
-import static com.epam.task6.resource.Constants.CURRENT_CATEGORY_PARAMETER;
-import static com.epam.task6.resource.Constants.NAME_ATTRIBUTE;
+import static com.epam.task6.resource.Constants.*;
 import static com.epam.task6.resource.Constants.SHOW_SUBCATEGORIES;
-import static com.epam.task6.resource.Constants.SUBCATEGORY_DATA;
 import static com.epam.task6.resource.Constants.XML_FILE;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,8 +13,10 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.jdom.Document;
-import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
+
+import com.epam.task6.form.ProductForm;
+import com.epam.task6.utils.ProductCounter;
 
 /**
  * This action shows list of subcategories
@@ -29,41 +25,25 @@ import org.jdom.input.SAXBuilder;
  * 
  */
 public class ShowSubcategoriesAction extends Action {
-    public ActionForward execute(ActionMapping actionMapping,
-	    ActionForm actionForm, HttpServletRequest request,
-	    HttpServletResponse response) throws Exception {
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
+	    HttpServletRequest request, HttpServletResponse response)
+	    throws Exception {
+	// Get JDOM document
 	SAXBuilder builder = new SAXBuilder();
 	Document doc = builder.build(XML_FILE);
-	Element root = doc.getRootElement();
-	Map<String, Integer> subcategoryData = new HashMap<>();
-	String currentCategory = request
-		.getParameter(CURRENT_CATEGORY_PARAMETER);
-	List<Element> categoryList = root.getChildren();
-	for (int i = 0; i < categoryList.size(); i++) {
-	    Element category = categoryList.get(i);
-	    String categoryName = category.getAttribute(NAME_ATTRIBUTE)
-		    .getValue();
-	    if (currentCategory.equals(categoryName)) {
-		List<Element> subcategoryList = category.getChildren();
-		for (int j = 0; j < subcategoryList.size(); j++) {
-		    Element subcategory = subcategoryList.get(j);
-		    int size = countProductsInSubcategory(subcategory);
-		    String subcategoryName = subcategory
-			    .getAttributeValue(NAME_ATTRIBUTE);
-		    subcategoryData.put(subcategoryName, size);
-		}
-	    }
-	}
+	// Set document to form
+	ProductForm productForm = (ProductForm) form;
+	productForm.setDocument(doc);
+	// Get category name and parameter
+	String categoryName = request.getParameter(CATEGORY_NAME_PARAMETER);
+	String categoryNumber = request.getParameter(CATEGORY_NUMBER_PARAMETER);
+	// Set parameters to session
 	HttpSession session = request.getSession();
-	session.setAttribute(SUBCATEGORY_DATA, subcategoryData);
-	session.setAttribute(CURRENT_CATEGORY_PARAMETER, currentCategory);
-	return actionMapping.findForward(SHOW_SUBCATEGORIES);
-    }
-
-    private int countProductsInSubcategory(Element subcategory) {
-	int size = 0;
-	List<Element> productList = subcategory.getChildren();
-	size += productList.size();
-	return size;
+	session.setAttribute(CATEGORY_NAME_PARAMETER, categoryName);
+	session.setAttribute(CATEGORY_NUMBER_PARAMETER, categoryNumber);
+	// Count products in subcategories
+	ProductCounter.countProducts(form, doc, categoryName);
+	// Forward to page
+	return mapping.findForward(SHOW_SUBCATEGORIES);
     }
 }

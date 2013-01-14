@@ -23,48 +23,51 @@
 			<tr>
 				<th>Producer</th>
 				<td><html:text property="product.producer">${product.producer }</html:text></td>
-				<td><div id="invalid_producer"></div></td>
+				<td><div class="error" class="error" id="invalid_producer"></div></td>
 			</tr>
 			<tr>
 				<th>Model</th>
 				<td><html:text property="product.model">${product.model }</html:text></td>
-				<td><div id="invalid_model"></div></td>
+				<td><div class="error" id="invalid_model"></div></td>
 			</tr>
 			<tr>
 				<th>Color</th>
 				<td><html:text property="product.color">${product.color }</html:text></td>
-				<td><div id="invalid_color"></div></td>
+				<td><div class="error" id="invalid_color"></div></td>
 			</tr>
 			<tr>
 				<th>Date of issue</th>
 				<td><html:text property="product.dateOfIssue">${product.dateOfIssue }</html:text></td>
-				<td><div id="invalid_date"></div></td>
+				<td><div class="error" id="invalid_date"></div></td>
 			</tr>
 			<tr>
 				<th>Price</th>
 				<td><html:text property="product.price">${product.price }</html:text></td>
-				<td><div id="invalid_price"></div></td>
+				<td><div class="error" id="invalid_price"></div></td>
 			</tr>
 			<tr>
 				<th>Not in stock</th>
 				<td><c:choose>
 						<c:when test="${product.notInStock }">
-							<html:checkbox property="product.notInStock" value="${product.notInStock }" />
+							<input type="checkbox" name="product.notInStock" checked />
 						</c:when>
 						<c:otherwise>
-							<html:checkbox property="product.notInStock" />
+							<input type="checkbox" name="product.notInStock" />
 						</c:otherwise>
 					</c:choose></td>
 			</tr>
 		</table>
 		<p>
 			<html:submit>Add</html:submit>
-			<html:submit onclick="location.replace('ShowProducts.do')">Back</html:submit>
 		</p>
 		<html:hidden property="current_category" value="${current_category }" />
 		<html:hidden property="current_subcategory"
 			value="${current_subcategory}" />
 	</html:form>
-	<p></p>
+	<form action="ShowProducts.do">
+		<input type="submit" value="Back" />
+		<input type="hidden" name="current_category" value="${current_category }" /> 
+		<input type="hidden" name="current_subcategory" value="${current_subcategory}" />
+	</form>
 </body>
 </html>

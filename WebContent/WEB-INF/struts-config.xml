@@ -7,7 +7,7 @@
 <struts-config>
 	<!-- Forms -->
 	<form-beans>
-		<form-bean name="addProductForm" type="com.epam.task6.form.AddProductForm"></form-bean>
+		<form-bean name="productForm" type="com.epam.task6.form.ProductForm"></form-bean>
 	</form-beans>
 
 	<!-- Global forwards -->
@@ -23,21 +23,28 @@
 	<!-- Actions -->
 	<action-mappings>
 
-		<action path="/ShowCategories" type="com.epam.task6.action.ShowCategoriesAction">
+		<action path="/ShowCategories" name="productForm"
+			type="com.epam.task6.action.ShowCategoriesAction">
 		</action>
 
-		<action path="/ShowSubcategories" type="com.epam.task6.action.ShowSubcategoriesAction">
+		<action path="/ShowSubcategories" name="productForm"
+			type="com.epam.task6.action.ShowSubcategoriesAction">
 		</action>
 
-		<action path="/ShowProducts" type="com.epam.task6.action.ShowProductsAction">
+		<action path="/ShowProducts" name="productForm"
+			type="com.epam.task6.action.ShowProductsAction">
 		</action>
 
-		<action path="/AddProduct" name="addProductForm"
+		<action path="/AddProduct" name="productForm"
 			type="com.epam.task6.action.AddProductAction">
 		</action>
-		
-		<action path="/SaveProduct" name="addProductForm"
-			type="com.epam.task6.action.AddProductAction">
+
+		<action path="/EditProduct" name="productForm"
+			type="com.epam.task6.action.EditProductAction">
+		</action>
+
+		<action path="/SaveProduct" name="productForm"
+			type="com.epam.task6.action.SaveProductAction">
 		</action>
 
 	</action-mappings>

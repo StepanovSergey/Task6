@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
+<%@ taglib uri="/WEB-INF/struts-nested.tld" prefix="nested"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -10,16 +11,34 @@
 <title>Subcategories</title>
 </head>
 <body>
+	<p>Category: ${categoryName }</p>
 	<p>Choose subcategory:</p>
-	<c:forEach items="${subcategory_data.keySet() }" var="key">
+	<nested:define id="subcategoryData" name="productForm"
+		property="subcategoryData" />
+
+	<!-- Iterate over categories -->
+	<nested:iterate id="category" name="productForm"
+		indexId="subcategoryNumber"
+		property="document.rootElement.children[${categoryNumber}].children">
+		<!-- Setting category name variable -->
+		<c:set var="subcategoryName">
+			<nested:write property='attributes[0].value' />
+		</c:set>
+		<!-- Show links to subcategories -->
 		<p>
 			<html:link action="/ShowProducts">
-				<c:out value="${key} (${subcategory_data.get(key)} items)"></c:out>
-				<html:param name="current_category" value="${current_category }"></html:param>
-				<html:param name="current_subcategory" value="${key }"></html:param>
+				 ${subcategoryName} (${subcategoryData.get(subcategoryName)} items)
+				<html:param name="categoryName" value="${categoryName }" />
+				<html:param name="subcategoryName" value="${subcategoryName }" />
+				<html:param name="subcategoryNumber" value="${subcategoryNumber }" />
 			</html:link>
 		</p>
-	</c:forEach>
-	<html:link action="/ShowCategories">Back</html:link>
+	</nested:iterate>
+
+	<input type="button" value="Back"
+		onclick="window.location = 'ShowCategories.do'">
 </body>
 </html:html>
+
+
+

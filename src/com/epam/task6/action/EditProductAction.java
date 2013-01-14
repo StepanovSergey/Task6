@@ -19,7 +19,7 @@ import com.epam.task6.model.Product;
  * @author Siarhei_Stsiapanau
  * 
  */
-public class AddProductAction extends Action {
+public class EditProductAction extends Action {
     public ActionForward execute(ActionMapping actionMapping,
 	    ActionForm actionForm, HttpServletRequest request,
 	    HttpServletResponse response) throws Exception {
