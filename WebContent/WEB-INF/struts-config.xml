@@ -16,35 +16,30 @@
 		<forward name="show_categories" path="/jsp/categories.jsp" />
 		<forward name="show_subcategories" path="/jsp/subcategories.jsp" />
 		<forward name="show_products" path="/jsp/products.jsp" />
-		<forward name="add_product" path="/jsp/addProduct.jsp" />
 
 	</global-forwards>
 
 	<!-- Actions -->
 	<action-mappings>
 
-		<action path="/ShowCategories" name="productForm"
-			type="com.epam.task6.action.ShowCategoriesAction">
+		<action path="/ShowCategories" name="productForm" scope="session"
+			type="com.epam.task6.action.ProductAction" parameter="showCategories">
 		</action>
 
-		<action path="/ShowSubcategories" name="productForm"
-			type="com.epam.task6.action.ShowSubcategoriesAction">
+		<action path="/ShowSubcategories" name="productForm" scope="session"
+			type="com.epam.task6.action.ProductAction" parameter="showSubcategories">
 		</action>
 
-		<action path="/ShowProducts" name="productForm"
-			type="com.epam.task6.action.ShowProductsAction">
+		<action path="/ShowProducts" name="productForm" scope="session"
+			type="com.epam.task6.action.ProductAction" parameter="showProducts">
 		</action>
 
-		<action path="/AddProduct" name="productForm"
-			type="com.epam.task6.action.AddProductAction">
+		<action path="/AddProduct" name="productForm" scope="session"
+			type="com.epam.task6.action.ProductAction" parameter="addProduct">
 		</action>
 
-		<action path="/EditProduct" name="productForm"
-			type="com.epam.task6.action.EditProductAction">
-		</action>
-
-		<action path="/SaveProduct" name="productForm"
-			type="com.epam.task6.action.SaveProductAction">
+		<action path="/UpdateProduct" name="productForm" scope="session"
+			type="com.epam.task6.action.ProductAction" parameter="updateProduct">
 		</action>
 
 	</action-mappings>

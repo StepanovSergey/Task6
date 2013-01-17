@@ -4,6 +4,7 @@
 <!ELEMENT subcategory (product+)>
 <!ATTLIST subcategory name CDATA #REQUIRED>
 <!ELEMENT product (producer,model,date_of_issue,color,(not_in_stock|price))>
+<!ATTLIST product name CDATA #REQUIRED>
 <!ELEMENT producer (#PCDATA)>
 <!ELEMENT model (#PCDATA)>
 <!ELEMENT date_of_issue (#PCDATA)>

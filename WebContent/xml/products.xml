@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE products SYSTEM "products.dtd">
-<products>
+<!-- <products xmlns:xs="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.epam.com" xs:schemaLocation="http://www.epam.com products.xsd"> -->
+	<products>
 	<category name="electronic">
 		<subcategory name="mobile">
-			<product>
+			<product name="mob1">
 				<producer>Samsung</producer>
 				<model>GS003</model>
 				<date_of_issue>02-09-2012</date_of_issue>
 				<color>White</color>
 				<price>600</price>
 			</product>
-			<product>
+			<product name="mob2">
 				<producer>Nokia</producer>
 				<model>WP920</model>
 				<date_of_issue>07-08-2012</date_of_issue>
 				<color>Blue</color>
 				<price>900</price>
 			</product>
-			<product>
+			<product name="mob3">
 				<producer>Apple</producer>
 				<model>IP005</model>
 				<date_of_issue>05-12-2012</date_of_issue>
@@ -26,14 +28,14 @@
 			</product>
 		</subcategory>
 		<subcategory name="laptop">
-			<product>
+			<product name="lap1">
 				<producer>HP</producer>
 				<model>HP815</model>
 				<date_of_issue>09-07-2011</date_of_issue>
 				<color>Silver</color>
 				<price>900</price>
 			</product>
-			<product>
+			<product name="lap2">
 				<producer>Toshiba</producer>
 				<model>SA300</model>
 				<date_of_issue>09-07-2010</date_of_issue>
@@ -44,14 +46,14 @@
 	</category>
 	<category name="auto">
 		<subcategory name="battery">
-			<product>
+			<product name="batt1">
 				<producer>Varta</producer>
 				<model>VA850</model>
 				<date_of_issue>15-10-2012</date_of_issue>
 				<color>Silver</color>
 				<price>250</price>
 			</product>
-			<product>
+			<product name="batt2">
 				<producer>Bosch</producer>
 				<model>BH315</model>
 				<date_of_issue>07-07-2012</date_of_issue>
@@ -60,14 +62,14 @@
 			</product>
 		</subcategory>
 		<subcategory name="tires">
-			<product>
+			<product name="tir1">
 				<producer>Belshina</producer>
 				<model>BY155</model>
 				<date_of_issue>25-09-2012</date_of_issue>
 				<color>Black</color>
 				<price>80</price>
 			</product>
-			<product>
+			<product name="tir2">
 				<producer>Nokian</producer>
 				<model>NK150</model>
 				<date_of_issue>26-08-2012</date_of_issue>

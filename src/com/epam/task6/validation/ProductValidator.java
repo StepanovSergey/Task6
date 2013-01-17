@@ -9,9 +9,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-
 import com.epam.task6.model.Product;
 
 /**
@@ -22,29 +19,38 @@ import com.epam.task6.model.Product;
  * 
  */
 public final class ProductValidator {
-    private static final Logger logger = Logger
-	    .getLogger(ProductValidator.class);
     /**
      * Pattern for model data tag
      */
-    public static final Pattern modelPattern = Pattern
+    private static final Pattern modelPattern = Pattern
 	    .compile("^(([A-Za-zÀ-ßà-ÿ¨¸]){2}([0-9]){3})$");
     /**
      * Pattern for date data tag
      */
-    public static final Pattern datePattern = Pattern
+    private static final Pattern datePattern = Pattern
 	    .compile("^((0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-(19[7-9][0-9]|2[0-2][0-9][0-9]))$");
     /**
      * Pattern for price data tag
      */
-    public static final Pattern pricePattern = Pattern
+    private static final Pattern pricePattern = Pattern
 	    .compile("^([1-9])(\\d*)|(\\d*\\.\\d{1,2})$");
     /**
      * Pattern for color data tag
      */
-    public static final Pattern colorPattern = Pattern
+    private static final Pattern colorPattern = Pattern
 	    .compile("^[A-Za-zÀ-ßà-ÿ¨¸]+$");
 
+    private boolean isProductValid = true;
+    private boolean isNameInvalid;
+    private boolean isProducerInvalid;
+    private boolean isModelInvalid;
+    private boolean isDateInvalid;
+    private boolean isColorInvalid;
+    private boolean isPriceInvalid;
+
+    /**
+     * Default constructor
+     */
     public ProductValidator() {
     }
 
@@ -55,29 +61,48 @@ public final class ProductValidator {
      *            product to test
      * @return is valid product
      */
-    public boolean isProductValid(Product product) {
+    public void isProductValid(Product product) {
 	if (product == null) {
-	    return false;
+	    isProductValid = false;
+	}
+	if (isNameInvalid(product.getName())) {
+	    isNameInvalid = true;
+	    isProductValid = false;
 	}
 	if (isProducerInvalid(product.getProducer())) {
-	    return false;
+	    isProducerInvalid = true;
+	    isProductValid = false;
 	}
 	if (isModelInvalid(product.getModel())) {
-	    return false;
+	    isModelInvalid = true;
+	    isProductValid = false;
 	}
 	if (isColorInvalid(product.getColor())) {
-	    return false;
+	    isColorInvalid = true;
+	    isProductValid = false;
 	}
 	String date = product.getDateOfIssue();
 	if (isDateInvalid(date)) {
-	    return false;
+	    isDateInvalid = true;
+	    isProductValid = false;
 	}
 	if (!product.isNotInStock()) {
 	    if (isPriceInvalid(product.getPrice())) {
-		return false;
+		isPriceInvalid = true;
+		isProductValid = false;
 	    }
 	}
-	return true;
+    }
+
+    /**
+     * Test name foe validation
+     * 
+     * @param name
+     *            name to test
+     * @return is name valid
+     */
+    public boolean isNameInvalid(String name) {
+	return isNull(name);
     }
 
     /**
@@ -169,15 +194,115 @@ public final class ProductValidator {
 		    }
 		}
 		isDataInvalid = !(matcher.matches());
-		if (isDataInvalid) {
-		}
 		return isDataInvalid;
 	    }
 	} catch (PatternSyntaxException e) {
-	    if (logger.isEnabledFor(Level.ERROR)) {
-		logger.error(e.getMessage(), e);
-	    }
-	    return isDataInvalid;
+	    throw e;
 	}
+    }
+
+    /**
+     * @return the isProductValid
+     */
+    public boolean isProductValid() {
+	return isProductValid;
+    }
+
+    /**
+     * @param isProductValid
+     *            the isProductValid to set
+     */
+    public void setProductValid(boolean isProductValid) {
+	this.isProductValid = isProductValid;
+    }
+
+    /**
+     * @return the isProducerInvalid
+     */
+    public boolean isProducerInvalid() {
+	return isProducerInvalid;
+    }
+
+    /**
+     * @param isProducerInvalid
+     *            the isProducerInvalid to set
+     */
+    public void setProducerInvalid(boolean isProducerInvalid) {
+	this.isProducerInvalid = isProducerInvalid;
+    }
+
+    /**
+     * @return the isModelInvalid
+     */
+    public boolean isModelInvalid() {
+	return isModelInvalid;
+    }
+
+    /**
+     * @param isModelInvalid
+     *            the isModelInvalid to set
+     */
+    public void setModelInvalid(boolean isModelInvalid) {
+	this.isModelInvalid = isModelInvalid;
+    }
+
+    /**
+     * @return the isDateInvalid
+     */
+    public boolean isDateInvalid() {
+	return isDateInvalid;
+    }
+
+    /**
+     * @param isDateInvalid
+     *            the isDateInvalid to set
+     */
+    public void setDateInvalid(boolean isDateInvalid) {
+	this.isDateInvalid = isDateInvalid;
+    }
+
+    /**
+     * @return the isColorInvalid
+     */
+    public boolean isColorInvalid() {
+	return isColorInvalid;
+    }
+
+    /**
+     * @param isColorInvalid
+     *            the isColorInvalid to set
+     */
+    public void setColorInvalid(boolean isColorInvalid) {
+	this.isColorInvalid = isColorInvalid;
+    }
+
+    /**
+     * @return the isPriceInvalid
+     */
+    public boolean isPriceInvalid() {
+	return isPriceInvalid;
+    }
+
+    /**
+     * @param isPriceInvalid
+     *            the isPriceInvalid to set
+     */
+    public void setPriceInvalid(boolean isPriceInvalid) {
+	this.isPriceInvalid = isPriceInvalid;
+    }
+
+    /**
+     * @return the isNameInvalid
+     */
+    public boolean isNameInvalid() {
+	return isNameInvalid;
+    }
+
+    /**
+     * @param isNameInvalid
+     *            the isNameInvalid to set
+     */
+    public void setNameInvalid(boolean isNameInvalid) {
+	this.isNameInvalid = isNameInvalid;
     }
 }

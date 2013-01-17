@@ -10,12 +10,28 @@ import java.io.Serializable;
  */
 public class Product implements Serializable {
     private static final long serialVersionUID = -2063462092851490543L;
+    private String name;
     private String producer;
     private String model;
     private String dateOfIssue;
     private String color;
     private boolean notInStock;
     private String price;
+
+    /**
+     * @return the name
+     */
+    public String getName() {
+	return name;
+    }
+
+    /**
+     * @param name
+     *            the name to set
+     */
+    public void setName(String name) {
+	this.name = name;
+    }
 
     /**
      * @return the producer
@@ -120,6 +136,7 @@ public class Product implements Serializable {
 	result = prime * result
 		+ ((dateOfIssue == null) ? 0 : dateOfIssue.hashCode());
 	result = prime * result + ((model == null) ? 0 : model.hashCode());
+	result = prime * result + ((name == null) ? 0 : name.hashCode());
 	result = prime * result + (notInStock ? 1231 : 1237);
 	result = prime * result + ((price == null) ? 0 : price.hashCode());
 	result = prime * result
@@ -156,6 +173,11 @@ public class Product implements Serializable {
 		return false;
 	} else if (!model.equals(other.model))
 	    return false;
+	if (name == null) {
+	    if (other.name != null)
+		return false;
+	} else if (!name.equals(other.name))
+	    return false;
 	if (notInStock != other.notInStock)
 	    return false;
 	if (price == null) {
@@ -179,7 +201,9 @@ public class Product implements Serializable {
     @Override
     public String toString() {
 	StringBuilder builder = new StringBuilder();
-	builder.append("Product [producer=");
+	builder.append("Product [name=");
+	builder.append(name);
+	builder.append(", producer=");
 	builder.append(producer);
 	builder.append(", model=");
 	builder.append(model);

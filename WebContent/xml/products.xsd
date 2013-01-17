@@ -35,6 +35,7 @@
 				<xs:element name="not_in_stock" type="notInStockType" />
 			</xs:choice>
 		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required" />
 	</xs:complexType>
 
 	<xs:simpleType name="notInStockType">

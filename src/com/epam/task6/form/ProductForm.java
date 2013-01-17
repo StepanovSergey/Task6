@@ -1,8 +1,9 @@
 package com.epam.task6.form;
 
-import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
 import org.jdom.Document;
 
 import com.epam.task6.model.Product;
@@ -17,38 +18,11 @@ public class ProductForm extends ActionForm {
     private static final long serialVersionUID = 2335611273728290457L;
     private Product product;
     private Document document;
-    private Map<String, Integer> categoryData;
-    private Map<String, Integer> subcategoryData;
-
-    /**
-     * @return the subcategoryData
-     */
-    public Map<String, Integer> getSubcategoryData() {
-	return subcategoryData;
-    }
-
-    /**
-     * @param subcategoryData
-     *            the subcategoryData to set
-     */
-    public void setSubcategoryData(Map<String, Integer> subcategoryData) {
-	this.subcategoryData = subcategoryData;
-    }
-
-    /**
-     * @return the categoryParameters
-     */
-    public Map<String, Integer> getCategoryData() {
-	return categoryData;
-    }
-
-    /**
-     * @param categoryParameters
-     *            the categoryParameters to set
-     */
-    public void setCategoryData(Map<String, Integer> categoryParameters) {
-	this.categoryData = categoryParameters;
-    }
+    private String categoryName;
+    private String categoryNumber;
+    private String subcategoryName;
+    private String subcategoryNumber;
+    private Integer[] checkboxes;
 
     /**
      * @return the document
@@ -80,4 +54,83 @@ public class ProductForm extends ActionForm {
 	this.product = product;
     }
 
+    /**
+     * @return the categoryName
+     */
+    public String getCategoryName() {
+	return categoryName;
+    }
+
+    /**
+     * @param categoryName
+     *            the categoryName to set
+     */
+    public void setCategoryName(String categoryName) {
+	this.categoryName = categoryName;
+    }
+
+    /**
+     * @return the categoryNumber
+     */
+    public String getCategoryNumber() {
+	return categoryNumber;
+    }
+
+    /**
+     * @param categoryNumber
+     *            the categoryNumber to set
+     */
+    public void setCategoryNumber(String categoryNumber) {
+	this.categoryNumber = categoryNumber;
+    }
+
+    /**
+     * @return the subcategoryName
+     */
+    public String getSubcategoryName() {
+	return subcategoryName;
+    }
+
+    /**
+     * @param subcategoryName
+     *            the subcategoryName to set
+     */
+    public void setSubcategoryName(String subcategoryName) {
+	this.subcategoryName = subcategoryName;
+    }
+
+    /**
+     * @return the subcategoryNumber
+     */
+    public String getSubcategoryNumber() {
+	return subcategoryNumber;
+    }
+
+    /**
+     * @param subcategoryNumber
+     *            the subcategoryNumber to set
+     */
+    public void setSubcategoryNumber(String subcategoryNumber) {
+	this.subcategoryNumber = subcategoryNumber;
+    }
+
+    /**
+     * @return the checkboxes
+     */
+    public Integer[] getCheckboxes() {
+	return checkboxes;
+    }
+
+    /**
+     * @param checkboxes
+     *            the checkboxes to set
+     */
+    public void setCheckboxes(Integer[] checkboxes) {
+	this.checkboxes = checkboxes;
+    }
+
+    public void reset(ActionMapping mapping, HttpServletRequest request) {
+	Integer[] resetArray = {};
+	checkboxes = resetArray;
+    }
 }

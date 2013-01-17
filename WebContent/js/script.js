@@ -1,3 +1,4 @@
+/*Validate add product form*/
 function validateAddProductForm(form) {
 	var element, elementValue;
 	var isProductValid = true;
@@ -9,6 +10,14 @@ function validateAddProductForm(form) {
 		element = form.elements[i];
 		elementName = element.name;
 		elementValue = element.value;
+		if (elementName == "product.name") {
+			if (elementValue == "") {
+				isProductValid = false;
+				showError("name", "Name must be specified");
+			} else {
+				clearError("name");
+			}
+		}
 		if (elementName == "product.producer") {
 			if (elementValue == "") {
 				isProductValid = false;
@@ -66,14 +75,33 @@ function validateAddProductForm(form) {
 	}
 }
 
+function validateProductName(element) {
+	if (element.value == "") {
+		isProductValid = false;
+		showError("name", "Name must be specified");
+	} else {
+		clearError("name");
+	}
+}
+
+/* Show error message on add product page in hidden div */
 function showError(fieldName, errorMessage) {
 	var elementName = "invalid_" + fieldName;
 	document.getElementById(elementName).style.display = '';
 	document.getElementById(elementName).innerHTML = errorMessage;
 }
 
+/* Clean error message on add product page in hidden div */
 function clearError(fieldName) {
 	var elementName = "invalid_" + fieldName;
 	document.getElementById(elementName).style.display = '';
 	document.getElementById(elementName).innerHTML = "";
+}
+
+function editButtonClick() {
+	alert('button click');
+	v = true;
+	if (v) {
+		window.location = 'ShowSubcategories.do';
+	}
 }

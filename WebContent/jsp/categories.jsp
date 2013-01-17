@@ -2,7 +2,6 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
-<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-nested.tld" prefix="nested"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
@@ -14,23 +13,45 @@
 </head>
 <body>
 	<p>Choose category:</p>
-	<nested:define id="categoryData" name="productForm"
-		property="categoryData" />
-	<!-- Iterate over categories -->
-	<nested:iterate id="category" name="productForm"
-		property="document.rootElement.children" indexId="categoryNumber">
-		<!-- Setting category name variable -->
-		<c:set var="categoryName">
-			<nested:write property='attributes[0].value' />
-		</c:set>
-		<!-- Show links to subcategories -->
-		<p>
-			<html:link action="/ShowSubcategories">
-				 ${categoryName} (${categoryData.get(categoryName)} items)
-				<html:param name="categoryName" value="${categoryName}" />
-				<html:param name="categoryNumber" value="${categoryNumber}" />
-			</html:link>
-		</p>
-	</nested:iterate>
+
+	<!-- Set product form as root element -->
+	<nested:root name="productForm">
+		<nested:nest property="document.rootElement">
+
+			<!-- Iterate over categories -->
+			<nested:iterate property="children" indexId="categoryNumber">
+
+				<!-- Category size variable -->
+				<bean:define id="categorySize" value="0" />
+
+				<!-- Count products in categories -->
+				<!-- Iterate over subcategories in category -->
+				<nested:iterate id="subcategory" property="children">
+
+					<!-- Count products in current subcategory -->
+					<nested:size id="currentSubcategorySize"
+						collection="${subcategory.children}" />
+
+					<!-- Add subcategory size to category size variable -->
+					<bean:define id="categorySize"
+						value="${categorySize + currentSubcategorySize }" />
+				</nested:iterate>
+
+				<!-- Setting category name variable -->
+				<c:set var="categoryName">
+					<nested:write property='attributes[0].value' />
+				</c:set>
+
+				<!-- Show links to subcategories -->
+				<p>
+					<html:link action="/ShowSubcategories">
+				 		${categoryName} (${categorySize} items)
+						<html:param name="categoryName" value="${categoryName}" />
+						<html:param name="categoryNumber" value="${categoryNumber}" />
+					</html:link>
+				</p>
+			</nested:iterate>
+		</nested:nest>
+	</nested:root>
 </body>
 </html>
