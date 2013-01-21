@@ -1,107 +1,104 @@
-/*Validate add product form*/
-function validateAddProductForm(form) {
-	var element, elementValue;
-	var isProductValid = true;
+/*Validate product form*/
+function validateProduct(form) {
+	clearAllErrorMessages(form);
+	var element;
+	var nameTagPattern = "attributes";
+	var producerTagPattern = "producer";
+	var modelTagPattern = "model";
+	var dateTagPattern = "date";
+	var priceTagPattern = "price";
+	var colorTagPattern = "color";
+	var notInStockTagPattern = "not_in_stock";
+	var checkboxTagName = "checkboxes";
 	var modelPattern = "^(([A-Za-zÀ-ßà-ÿ¨¸]){2}([0-9]){3})$";
 	var datePattern = "^((0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-(19[7-9][0-9]|2[0-2][0-9][0-9]))$";
-	var pricePattern = "^([1-9])(\\d*)|(\\d*\\.\\d{1,2})$";
+	var pricePattern = "^([1-9]([0-9]*)|([0-9]*\.[0-9]{1,2}))$";
 	var colorPattern = "^[A-Za-zÀ-ßà-ÿ¨¸]+$";
+	var lineNumber = 1;
+	var priceElement = null;
+
 	for ( var i = 0; i < form.elements.length; i++) {
 		element = form.elements[i];
 		elementName = element.name;
-		elementValue = element.value;
-		if (elementName == "product.name") {
-			if (elementValue == "") {
-				isProductValid = false;
-				showError("name", "Name must be specified");
-			} else {
-				clearError("name");
-			}
+		if (test(elementName, nameTagPattern)) {
+			validate(element, lineNumber, "Name must be specified");
 		}
-		if (elementName == "product.producer") {
-			if (elementValue == "") {
-				isProductValid = false;
-				showError("producer", "Producer must be specified");
-			} else {
-				clearError("producer");
-			}
+		if (test(elementName, producerTagPattern)) {
+			validate(element, lineNumber, "Producer must be specified");
 		}
-		if (elementName == "product.model") {
-			var expr = new RegExp(modelPattern);
-			if (!(elementValue.match(expr))) {
-				isProductValid = false;
-				showError("model", "Model must contain 2 letters and 3 digits");
-			} else {
-				clearError("model");
-			}
+		if (test(elementName, modelTagPattern)) {
+			validateByPattern(element, modelPattern, lineNumber,
+					"Model must contain 2 letters and 3 digits");
 		}
-		if (elementName == "product.color") {
-			var expr = new RegExp(colorPattern);
-			if (!(elementValue.match(expr))) {
-				isProductValid = false;
-				showError("color", "Color must be specified");
-			} else {
-				clearError("color");
-			}
+		if (test(elementName, dateTagPattern)) {
+			validateByPattern(element, datePattern, lineNumber,
+					"Date must be dd-MM-yyyy");
 		}
-
-		if (elementName == "product.price") {
-			el = document.getElementsByName("product.notInStock");
-			notInStock = el[0];
-			if (notInStock.checked == false) {
-				var expr = new RegExp(pricePattern);
-				if (!(elementValue.match(expr))) {
-					isProductValid = false;
-					showError("price", "Price must be e.g 14, 10.0 or 17.12");
-				} else {
-					clearError("price");
-				}
-			}
+		if ((test(elementName, priceTagPattern))
+				|| (test(elementName, notInStockTagPattern))) {
+			priceElement = element;
 		}
-		if (elementName == "product.dateOfIssue") {
-			var expr = new RegExp(datePattern);
-			if (!(elementValue.match(expr))) {
-				isProductValid = false;
-				showError("date", "Date must be dd-MM-yyyy");
-			} else {
-				clearError("date");
+		if (test(elementName, colorTagPattern)) {
+			validateByPattern(element, colorPattern, lineNumber,
+					"Color must be letters");
+		}
+		if (elementName == checkboxTagName) {
+			if (!(element.checked)) {
+				validateByPattern(priceElement, pricePattern, lineNumber,
+						"Price must be e.g 14, 10.0 or 17.12");
 			}
+			lineNumber++;
 		}
 	}
-	if (isProductValid) {
+	var size = document.getElementById('error_div').innerHTML.length;
+	if (size == 0) {
+		return true;
+	} else {
+		return false;
+	}
+
+}
+
+function validate(element, lineNumber, errorMessage) {
+	if (element.value == "") {
+		showError(lineNumber, errorMessage);
+		element.style.backgroundColor = "#d0d0d0";
+	}
+}
+
+function validateByPattern(element, pattern, lineNumber, errorMessage) {
+	var expr = new RegExp(pattern);
+	var elementValue = element.value;
+	if (!(elementValue.match(expr))) {
+		element.style.backgroundColor = '#FF4F4F';
+		showError(lineNumber, errorMessage);
+	}
+}
+
+function test(value, pattern) {
+	var expr = new RegExp(pattern);
+	if (value.match(expr)) {
 		return true;
 	} else {
 		return false;
 	}
 }
 
-function validateProductName(element) {
-	if (element.value == "") {
-		isProductValid = false;
-		showError("name", "Name must be specified");
-	} else {
-		clearError("name");
-	}
-}
-
 /* Show error message on add product page in hidden div */
-function showError(fieldName, errorMessage) {
-	var elementName = "invalid_" + fieldName;
-	document.getElementById(elementName).style.display = '';
-	document.getElementById(elementName).innerHTML = errorMessage;
+function showError(lineNumber, errorMessage) {
+	var elementName = 'error_div';
+	errorMessage = 'Line ' + lineNumber + ': ' + errorMessage + '<br>';
+	document.getElementById(elementName).innerHTML += errorMessage;
 }
 
 /* Clean error message on add product page in hidden div */
-function clearError(fieldName) {
-	var elementName = "invalid_" + fieldName;
-	document.getElementById(elementName).style.display = '';
-	document.getElementById(elementName).innerHTML = "";
-}
-
-function editButtonClick() {
-	alert('button click');
-	v = true;
-	if (v) {
-		window.location = 'ShowSubcategories.do';
+function clearAllErrorMessages(form) {
+	var elementName = 'error_div';
+	document.getElementById(elementName).innerHTML = '';
+	for ( var i = 0; i < form.elements.length; i++) {
+		var element = form.elements[i];
+		if (element.type == "text") {
+			element.style.backgroundColor = "";
+		}
 	}
 }

@@ -56,6 +56,7 @@ import org.jdom.output.XMLOutputter;
 import com.epam.task6.form.ProductForm;
 import com.epam.task6.model.Product;
 import com.epam.task6.transform.XsltTransformerFactory;
+import com.epam.task6.utils.MyFileWriter;
 import com.epam.task6.validation.ProductValidator;
 
 /**
@@ -66,10 +67,15 @@ import com.epam.task6.validation.ProductValidator;
  */
 public final class ProductAction extends MappingDispatchAction {
     private static final Logger logger = Logger.getLogger(ProductAction.class);
-    private static final String ENCODING = "UTF-8";
     private static final ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
     private static final Lock readLock = readWriteLock.readLock();
-    private static final Lock writeLock = readWriteLock.writeLock();
+
+    /**
+     * @return the readwritelock
+     */
+    public static ReadWriteLock getReadwritelock() {
+	return readWriteLock;
+    }
 
     /**
      * Show categories of products
@@ -90,7 +96,7 @@ public final class ProductAction extends MappingDispatchAction {
 	    HttpServletRequest request, HttpServletResponse response)
 	    throws Exception {
 	// Setting application real path
-	if (REAL_PATH.equals("")) {
+	if (REAL_PATH.isEmpty()) {
 	    REAL_PATH = request.getServletContext().getRealPath("");
 	}
 
@@ -249,7 +255,7 @@ public final class ProductAction extends MappingDispatchAction {
 	    if (validator.isProductValid()) {
 		if (lastModified == XML_FILE.lastModified()) {
 		    // Write to file
-		    write(result);
+		    MyFileWriter.write(result);
 		    // Show products page
 		    return new ActionRedirect("ShowProducts.do");
 		} else {
@@ -318,9 +324,9 @@ public final class ProductAction extends MappingDispatchAction {
 		}
 	    }
 	}
-	writeXml(doc);
+	MyFileWriter.write(doc);
 	ActionRedirect redirect = new ActionRedirect(
-		actionMapping.findForward(SHOW_PRODUCTS));
+		actionMapping.findForward(SHOW_PRODUCTS_ACTION));
 	return redirect;
     }
 
@@ -336,12 +342,17 @@ public final class ProductAction extends MappingDispatchAction {
      */
     private void createNewDocument(ProductForm productForm)
 	    throws JDOMException, IOException {
-	// Get JDOM document
-	SAXBuilder builder = new SAXBuilder();
-	Document doc = builder.build(XML_FILE);
+	readLock.lock();
+	try {
+	    // Get JDOM document
+	    SAXBuilder builder = new SAXBuilder();
+	    Document doc = builder.build(XML_FILE);
 
-	// Set document to form
-	productForm.setDocument(doc);
+	    // Set document to form
+	    productForm.setDocument(doc);
+	} finally {
+	    readLock.unlock();
+	}
     }
 
     /**
@@ -438,7 +449,7 @@ public final class ProductAction extends MappingDispatchAction {
     }
 
     /**
-     * Create array of checked checkboxes on products page
+     * Create array of checked checkboxes from products page
      * 
      * @param doc
      *            current document
@@ -483,30 +494,6 @@ public final class ProductAction extends MappingDispatchAction {
     }
 
     /**
-     * Write document to xml file
-     * 
-     * @param doc
-     *            document to write
-     */
-    private void writeXml(Document doc) {
-
-	XMLOutputter xmlOutput = new XMLOutputter();
-
-	// display nice nice
-	xmlOutput.setFormat(Format.getPrettyFormat());
-	writeLock.lock();
-	try {
-	    xmlOutput.output(doc, new FileWriter(REAL_PATH + XML_PATH));
-	} catch (IOException e) {
-	    if (logger.isEnabledFor(Level.ERROR)) {
-		logger.error(e.getMessage(), e);
-	    }
-	} finally {
-	    writeLock.unlock();
-	}
-    }
-
-    /**
      * Is current product is not in stock when it's edited by form on products
      * page?
      * 
@@ -527,26 +514,4 @@ public final class ProductAction extends MappingDispatchAction {
 	}
 	return false;
     }
-
-    /**
-     * Write xml file from writer
-     * 
-     * @param writer
-     *            where it's storing new xml file structure
-     */
-    private void write(Writer writer) {
-	try {
-	    Writer fileWriter = new PrintWriter(XML_FILE, ENCODING);
-	    writeLock.lock();
-	    fileWriter.write(writer.toString());
-	    fileWriter.flush();
-	} catch (IOException e) {
-	    if (logger.isEnabledFor(Level.ERROR)) {
-		logger.error(e.getMessage(), e);
-	    }
-	} finally {
-	    writeLock.unlock();
-	}
-    }
-
 }

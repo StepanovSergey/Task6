@@ -13,25 +13,12 @@ public final class Constants {
     // Common constants
     public static String REAL_PATH = "";
     public static File XML_FILE;
-    public static final String COMMAND_PARAMETER = "command";
-    public static final String NO_COMMAND = "no_command";
     public static final String XML_PATH = "/xml/products.xml";
-    public static final String ERROR_PAGE = "jsp/error.jsp";
     public static final String CATEGORY_NAME_PARAMETER = "categoryName";
     public static final String SUBCATEGORY_NAME_PARAMETER = "subcategoryName";
     public static final String CATEGORY_NUMBER_PARAMETER = "categoryNumber";
     public static final String SUBCATEGORY_NUMBER_PARAMETER = "subcategoryNumber";
-    // Categories constants
-    public static final String SHOW_CATEGORIES_COMMAND = "show_categories";
-    public static final String CATEGORIES_XSLT = "/xsl/categories.xsl";
-    // Subcategories constants
-    public static final String SHOW_SUBCATEGORIES_COMMAND = "show_subcategories";
-    public static final String SUBCATEGORIES_XSLT = "/xsl/subcategories.xsl";
-    // Products constants
-    public static final String SHOW_PRODUCTS_COMMAND = "show_products";
-    public static final String PRODUCTS_XSLT = "/xsl/products.xsl";
     // Add product constants
-    public static final String ADD_PRODUCT_COMMAND = "add_product";
     public static final String ADD_PRODUCT_XSLT = "/xsl/addProduct.xsl";
     public static final String PRODUCT_PARAMETER = "product";
     // XML tags
@@ -53,13 +40,12 @@ public final class Constants {
     public static final String COLOR_PATTERN = "color_pattern";
     public static final String DEFAULT_PRICE = "0";
     // Task6
-    public static final String CATEGORY_DATA = "category_data";
-    public static final String SUBCATEGORY_DATA = "subcategory_data";
     public static final String PRODUCTS = "products";
     public static final String PRODUCT = "product";
     //Forwards
     public static final String SHOW_CATEGORIES = "show_categories";
     public static final String SHOW_SUBCATEGORIES = "show_subcategories";
     public static final String SHOW_PRODUCTS = "show_products";
+    public static final String SHOW_PRODUCTS_ACTION = "show_products_action";
     public static final String ADD_PRODUCT = "add_product";
 }

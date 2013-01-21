@@ -16,6 +16,7 @@
 		<forward name="show_categories" path="/jsp/categories.jsp" />
 		<forward name="show_subcategories" path="/jsp/subcategories.jsp" />
 		<forward name="show_products" path="/jsp/products.jsp" />
+		<forward name="show_products_action" path="/ShowProducts.do" />
 
 	</global-forwards>
 

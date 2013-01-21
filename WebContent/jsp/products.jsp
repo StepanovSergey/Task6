@@ -21,11 +21,13 @@
 		&rarr; Subcategory:
 		<nested:write name="productForm" property="subcategoryName" />
 	</p>
-	<nested:form action="UpdateProduct.do" method="post">
+	<nested:form action="UpdateProduct.do" method="post"
+		onsubmit="return validateProduct(this)">
 		<!-- Table header -->
 		<p>List of products:</p>
 		<table border=1>
 			<tr>
+				<th>#</th>
 				<th>Name</th>
 				<th>Producer</th>
 				<th>Model</th>
@@ -48,6 +50,7 @@
 					<nested:iterate id="product" property="children"
 						indexId="productIndex">
 						<tr>
+							<td>${productIndex + 1}</td>
 							<td><nested:text property="attributes[0].value" size="15"
 									styleClass="name" onblur="validateProductName(this)" /></td>
 							<!-- Class name is name of tag -->
@@ -77,12 +80,13 @@
 
 		<!-- Buttons -->
 		<p>
-			<input type="button" value="Add"
+			<input type="button" value="Back"
+				onclick="window.location = '/Task6/ShowSubcategories.do'"><input
+				type="button" value="Add"
 				onclick="window.location = 'AddProduct.do'"> <input
-				type="submit" value="Update"> <input type="button"
-				value="Back"
-				onclick="window.location = '/Task6/ShowSubcategories.do'">
+				type="submit" value="Update">
 		</p>
 	</nested:form>
+	<div id="error_div"></div>
 </body>
 </html>

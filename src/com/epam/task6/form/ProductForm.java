@@ -14,7 +14,7 @@ import com.epam.task6.model.Product;
  * @author Siarhei_Stsiapanau
  * 
  */
-public class ProductForm extends ActionForm {
+public final class ProductForm extends ActionForm {
     private static final long serialVersionUID = 2335611273728290457L;
     private Product product;
     private Document document;

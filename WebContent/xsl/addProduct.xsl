@@ -120,9 +120,9 @@
 					<td>
 					</td>
 					<td>
-						<input type="submit" value="Save" />
 						<input type="button" value="Back"
 							onclick="window.location='ShowProducts.do'" />
+						<input type="submit" value="Save" />
 					</td>
 				</tr>
 			</form>
